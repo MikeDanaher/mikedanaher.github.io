@@ -1,4 +1,4 @@
-mikedanaher.github.io
+Mike Danaher
 =====================
 
 My personal site

@@ -1,0 +1,13 @@
+# Site settings
+title: Mike Danaher
+email: danaher.mike@gmail.com
+description: "A personal website and blog for Mike Danaher"
+baseurl: ""
+url: "http://mikedanaher.github.io"
+twitter_username: mikedanaher
+github_username:  mikedanaher
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+highlighter: pygments
