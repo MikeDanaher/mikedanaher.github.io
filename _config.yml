@@ -6,6 +6,7 @@ baseurl: ""
 url: "http://mikedanaher.github.io"
 twitter_username: mikedanaher
 github_username:  mikedanaher
+linkedin_username: mikedanaher
 
 # Build settings
 markdown: kramdown
