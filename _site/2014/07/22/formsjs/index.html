@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Introducing FormsJs</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="A personal website and blog for Mike Danaher">
+    <link rel="canonical" href="http://mikedanaher.github.io/2014/07/22/formsjs/">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+</head>
+
+
+    <body>
+
+    <header class="site-header">
+
+  <div class="wrap">
+
+    <a class="site-title" href="/"><img src="/images/MD_logo.png" alt="Mike Danaher" /></a>
+
+    <nav class="site-nav">
+      <div class="trigger">
+        
+          <a class="page-link" href="/about/">About</a>
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+  <header class="post-header">
+    <h1>Introducing FormsJs</h1>
+    <p class="meta">Jul 22, 2014</p>
+  </header>
+
+  <article class="post-content">
+  <p>Working with web forms can be tedious and time consuming. Many of the tools that exist today require individual setup and handling for each form element. Furthermore, the current set of tools can be rigid and limiting in their functionality.</p>
+
+<p>FormsJs hopes to solve a few of these challenges. A lightweight, javascript library, FormsJs allows you to work on an entire form at once. Using an array of javascript objects, you can populate a form with default values, check all validations, gather a list of error messages, and serialize all the data to be passed to the server. These configuration objects also make it easy to change functionality as your form evolves over time.</p>
+
+<p>FormsJs was built with three main classes: Populator, Validator, and Serializer. Each class is instantiated with a different configuration giving you the flexibility to use the appropriate tool for the job. </p>
+
+<h3 id="populator">Populator</h3>
+
+<p>The job of the populator is, naturally, to populate forms. You you give it a list of all the elements you want populated, with the values you want, and it does the rest. Here’s a sample configuration array:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">populatorConfig</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="nx">elementSelector</span><span class="o">:</span> <span class="s2">&quot;[data-id=&#39;email&#39;]&quot;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;me@example.com&quot;</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;checkbox&quot;</span><span class="p">,</span>
+    <span class="nx">elementSelector</span><span class="o">:</span> <span class="s2">&quot;[data-id=&#39;opt-in&#39;]&quot;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;Sign me up for the newsletter&#39;</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span></code></pre></div>
+
+<p>With this configuration, we are telling the form to autofill the email address and check the box to sign them up for newsletters. The type parameter specifies the type of element to target. Currently FormsJs supports ‘text’, ‘radio’, ‘checkbox’, and ‘select’ as strings. </p>
+
+<p>The elementSelector parameter specifies the specific element to target using a jQuery selector (i.e. ‘[name=email]’, ‘#email’, etc.).</p>
+
+<p>The value parameter is the value to be populated. Text boxes, radio buttons, and select lists all take strings. Checkboxes take an array of strings to account for the possibility of groups of checkboxes with the same selector.</p>
+
+<p>To use this configuration on your form, create a new Populator with the populatorConfig:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">populator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FormsJs</span><span class="p">.</span><span class="nx">Populator</span><span class="p">(</span><span class="nx">populatorConfig</span><span class="p">)</span></code></pre></div>
+
+<p>Then, when you’re ready to populate the form, you just call the populate method on your populator.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">populator</span><span class="p">.</span><span class="nx">populate</span><span class="p">()</span></code></pre></div>
+
+<h3 id="validator">Validator</h3>
+
+<p>Once the user has completed the form, you’ll want to validate the information before submitting. The Validator class handles this for all of the form’s elements. Using a configuration array similar to the populator, the validator also looks for a type and an elementSelector. Additionally, it also looks for an array of validations giving each element the ability to match several different validations (i.e. ‘required’ and ‘minLength’). Here’s a sample validator configuration:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">validatorConfig</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="nx">elementSelector</span><span class="o">:</span> <span class="s2">&quot;[data-id=&#39;email&#39;]&quot;</span><span class="p">,</span>
+    <span class="nx">validations</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;required&quot;</span><span class="p">,</span>
+        <span class="nx">errorMessage</span><span class="o">:</span> <span class="s2">&quot;Email is required&quot;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span>
+        <span class="nx">errorMessage</span><span class="o">:</span> <span class="s2">&quot;Please enter a valid email address&quot;</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="nx">elementSelector</span><span class="o">:</span> <span class="s2">&quot;[name=phone]&quot;</span><span class="p">,</span>
+    <span class="nx">validations</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;regExp&quot;</span><span class="p">,</span>
+        <span class="nx">pattern</span><span class="o">:</span> <span class="sr">/(?:\d{3}|\(\d{3}\))([-\/\.])\d{3}\1\d{4}/</span><span class="p">,</span>
+        <span class="nx">errorMessage</span><span class="o">:</span> <span class="s2">&quot;Please enter a valid phone number as ###-###-####&quot;</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">]</span></code></pre></div>
+
+<p>As you can see, within the validations parameter a ‘type’ and an ‘errorMessage’ are specified. Certain validations also have an additional parameter depending on their type (i.e. ‘minLength’ and ‘maxLength’ both also require a ‘length’). Currently, FormsJs supports the following validation types: ‘required’, ‘email’, ‘minLength’, ‘maxLength’, ‘regExp’, and ‘matchingInput’.</p>
+
+<p>These types should cover the majority of form validation needs. However, we also included a ‘customMatcher’ should you need any specific validating. This validator requires a third parameter - a callback function that takes a value to be matched against and returns true or false.</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">validations</span><span class="o">:</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">type</span> <span class="o">:</span> <span class="s2">&quot;customMatcher&quot;</span><span class="p">,</span>
+    <span class="nx">errorMessage</span> <span class="o">:</span> <span class="s2">&quot;Phone type is required when a phone number is entered&quot;</span><span class="p">,</span>
+    <span class="nx">matcher</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+                  <span class="nx">otherField</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;[name=phone]&quot;</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">otherField</span> <span class="o">===</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
+                      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">!==</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="p">{</span>
+                      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+                    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">]</span></code></pre></div>
+
+<p>To use the validatorConfig in your form, create a new validator with your configuration:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">validator</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FormsJs</span><span class="p">.</span><span class="nx">Validator</span><span class="p">(</span><span class="nx">validatorConfig</span><span class="p">)</span></code></pre></div>
+
+<p>The Validator Class has two methods: <code>isValid()</code> and <code>errors()</code></p>
+
+<p>Calling <code>validator.isValid()</code> will return true or false. Calling <code>validator.errors()</code> will return an object with the elementSelector and an array of its error messages. If our email address was left blank, this would return:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">{</span> <span class="s2">&quot;[data-id=&#39;email&#39;]&quot;</span> <span class="o">:</span> <span class="p">[</span> <span class="s2">&quot;Email is required&quot;</span><span class="p">,</span> <span class="s2">&quot;Please enter a valid email address&quot;</span> <span class="p">]</span> <span class="p">}</span></code></pre></div>
+
+<p>As you can see, FormsJs gives you complete control over how to validate a form and display the errors. </p>
+
+<h3 id="serializer">Serializer</h3>
+
+<p>After you have a complete, valid form, you need to serialize the data to be passed to the server. As with the other classes, FormsJs gives you complete control over how to do this. Start by creating a serializer configuration:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">serializerConfig</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="nx">elementSelector</span><span class="o">:</span> <span class="s2">&quot;[name=firstName]&quot;</span><span class="p">,</span>
+    <span class="nx">dataKey</span><span class="o">:</span> <span class="s2">&quot;first_name&quot;</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="nx">elementSelector</span><span class="o">:</span> <span class="s2">&quot;[name=lastName]&quot;</span><span class="p">,</span>
+    <span class="nx">dataKey</span><span class="o">:</span> <span class="s2">&quot;last_name&quot;</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+    <span class="nx">elementSelector</span><span class="o">:</span> <span class="s2">&quot;[name=email]&quot;</span><span class="p">,</span>
+    <span class="nx">dataKey</span><span class="o">:</span> <span class="s2">&quot;email&quot;</span>
+  <span class="p">}</span></code></pre></div>
+
+<p>In addition to the usual ‘type’ and ‘elementSelector’ parameters, the serializer has an optional ‘dataKey’ parameter. This allows you to specify the exact way the field should be sent to your database. If a ‘dataKey’ is not specified, FormsJs will use the HTML name attribute from your element.</p>
+
+<p>As with the previous classes, create a new Serializer with your configuration:  </p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">serializer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FormsJs</span><span class="p">.</span><span class="nx">Serializer</span><span class="p">(</span><span class="nx">serializerConfig</span><span class="p">)</span></code></pre></div>
+
+<p>Calling <code>serializer.serialize()</code> will return a JSON object with each key being the specified dataKey (or element name) and the current value of the form:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">{</span> <span class="s2">&quot;first_name&quot;</span> <span class="o">:</span> <span class="s2">&quot;Mike&quot;</span><span class="p">,</span> <span class="s2">&quot;last_name&quot;</span> <span class="o">:</span> <span class="s2">&quot;Danaher&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span> <span class="o">:</span> <span class="s2">&quot;miked@example.com&quot;</span> <span class="p">}</span></code></pre></div>
+
+<p>Hopefully you can see the value that FormsJs brings to web forms. For more information and complete sample config files, check out the README on the <a href="https://github.com/bwvoss/forms.js">project’s home page</a>.</p>
+
+  </article>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrap">
+
+    <h2 class="footer-heading">Contact</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>
+          <a href="https://github.com/mikedanaher">
+            <span class="icon github">
+              <svg version="1.1" class="github-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C2C2C2" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761
+                c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32
+                c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472
+                c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037
+                C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65
+                c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261
+                c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082
+                c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129
+                c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <span class="username">Github</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://twitter.com/mikedanaher">
+            <span class="icon twitter">
+              <svg version="1.1" class="twitter-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill="#C2C2C2" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27
+                c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767
+                c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206
+                C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271
+                c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469
+                c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+              </svg>
+            </span>
+            <span class="username">Twitter</span>
+          </a>
+          </li>
+        <li>
+          <a href="https://www.linkedin.com/in/mikedanaher">
+            <span class="icon linkedin">
+              <img src='/images/linkedin-icon-grey.png' alt='LinkedIn Logo' />
+            </span>
+            <span class="username">LinkedIn</span>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+
+    <div class="column">
+      <p class="text">A personal website and blog for Mike Danaher</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+    </body>
+</html>

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mike Danaher</title>
+    <description>A personal website and blog for Mike Danaher</description>
+    <link>http://mikedanaher.github.io/</link>
+    <atom:link href="http://mikedanaher.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Fri, 08 Aug 2014 15:29:46 -0500</pubDate>
+    <lastBuildDate>Fri, 08 Aug 2014 15:29:46 -0500</lastBuildDate>
+    <generator>Jekyll v2.1.1</generator>
+    
+      <item>
+        <title>Introducing FormsJs</title>
+        <description>&lt;p&gt;Working with web forms can be tedious and time consuming. Many of the tools that exist today require individual setup and handling for each form element. Furthermore, the current set of tools can be rigid and limiting in their functionality.&lt;/p&gt;
+
+&lt;p&gt;FormsJs hopes to solve a few of these challenges. A lightweight, javascript library, FormsJs allows you to work on an entire form at once. Using an array of javascript objects, you can populate a form with default values, check all validations, gather a list of error messages, and serialize all the data to be passed to the server. These configuration objects also make it easy to change functionality as your form evolves over time.&lt;/p&gt;
+
+&lt;p&gt;FormsJs was built with three main classes: Populator, Validator, and Serializer. Each class is instantiated with a different configuration giving you the flexibility to use the appropriate tool for the job. &lt;/p&gt;
+
+&lt;h3 id=&quot;populator&quot;&gt;Populator&lt;/h3&gt;
+
+&lt;p&gt;The job of the populator is, naturally, to populate forms. You you give it a list of all the elements you want populated, with the values you want, and it does the rest. Here’s a sample configuration array:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;populatorConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;elementSelector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;[data-id=&amp;#39;email&amp;#39;]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;me@example.com&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;checkbox&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;elementSelector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;[data-id=&amp;#39;opt-in&amp;#39;]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Sign me up for the newsletter&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;With this configuration, we are telling the form to autofill the email address and check the box to sign them up for newsletters. The type parameter specifies the type of element to target. Currently FormsJs supports ‘text’, ‘radio’, ‘checkbox’, and ‘select’ as strings. &lt;/p&gt;
+
+&lt;p&gt;The elementSelector parameter specifies the specific element to target using a jQuery selector (i.e. ‘[name=email]’, ‘#email’, etc.).&lt;/p&gt;
+
+&lt;p&gt;The value parameter is the value to be populated. Text boxes, radio buttons, and select lists all take strings. Checkboxes take an array of strings to account for the possibility of groups of checkboxes with the same selector.&lt;/p&gt;
+
+&lt;p&gt;To use this configuration on your form, create a new Populator with the populatorConfig:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;populator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;FormsJs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Populator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;populatorConfig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Then, when you’re ready to populate the form, you just call the populate method on your populator.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;nx&quot;&gt;populator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;populate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;validator&quot;&gt;Validator&lt;/h3&gt;
+
+&lt;p&gt;Once the user has completed the form, you’ll want to validate the information before submitting. The Validator class handles this for all of the form’s elements. Using a configuration array similar to the populator, the validator also looks for a type and an elementSelector. Additionally, it also looks for an array of validations giving each element the ability to match several different validations (i.e. ‘required’ and ‘minLength’). Here’s a sample validator configuration:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;validatorConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;elementSelector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;[data-id=&amp;#39;email&amp;#39;]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;validations&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;required&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;errorMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Email is required&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;email&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;errorMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Please enter a valid email address&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;elementSelector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;[name=phone]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;validations&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;regExp&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;pattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/(?:\d{3}|\(\d{3}\))([-\/\.])\d{3}\1\d{4}/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;errorMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Please enter a valid phone number as ###-###-####&amp;quot;&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;As you can see, within the validations parameter a ‘type’ and an ‘errorMessage’ are specified. Certain validations also have an additional parameter depending on their type (i.e. ‘minLength’ and ‘maxLength’ both also require a ‘length’). Currently, FormsJs supports the following validation types: ‘required’, ‘email’, ‘minLength’, ‘maxLength’, ‘regExp’, and ‘matchingInput’.&lt;/p&gt;
+
+&lt;p&gt;These types should cover the majority of form validation needs. However, we also included a ‘customMatcher’ should you need any specific validating. This validator requires a third parameter - a callback function that takes a value to be matched against and returns true or false.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;nx&quot;&gt;validations&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;customMatcher&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;errorMessage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Phone type is required when a phone number is entered&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;matcher&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                  &lt;span class=&quot;nx&quot;&gt;otherField&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;[name=phone]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;otherField&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To use the validatorConfig in your form, create a new validator with your configuration:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;validator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;FormsJs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Validator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;validatorConfig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The Validator Class has two methods: &lt;code&gt;isValid()&lt;/code&gt; and &lt;code&gt;errors()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Calling &lt;code&gt;validator.isValid()&lt;/code&gt; will return true or false. Calling &lt;code&gt;validator.errors()&lt;/code&gt; will return an object with the elementSelector and an array of its error messages. If our email address was left blank, this would return:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;[data-id=&amp;#39;email&amp;#39;]&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Email is required&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Please enter a valid email address&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;As you can see, FormsJs gives you complete control over how to validate a form and display the errors. &lt;/p&gt;
+
+&lt;h3 id=&quot;serializer&quot;&gt;Serializer&lt;/h3&gt;
+
+&lt;p&gt;After you have a complete, valid form, you need to serialize the data to be passed to the server. As with the other classes, FormsJs gives you complete control over how to do this. Start by creating a serializer configuration:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;serializerConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;elementSelector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;[name=firstName]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;dataKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;first_name&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;elementSelector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;[name=lastName]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;dataKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;last_name&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;elementSelector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;[name=email]&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;dataKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;email&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In addition to the usual ‘type’ and ‘elementSelector’ parameters, the serializer has an optional ‘dataKey’ parameter. This allows you to specify the exact way the field should be sent to your database. If a ‘dataKey’ is not specified, FormsJs will use the HTML name attribute from your element.&lt;/p&gt;
+
+&lt;p&gt;As with the previous classes, create a new Serializer with your configuration:  &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;serializer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;FormsJs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Serializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;serializerConfig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Calling &lt;code&gt;serializer.serialize()&lt;/code&gt; will return a JSON object with each key being the specified dataKey (or element name) and the current value of the form:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;first_name&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Mike&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;last_name&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Danaher&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;email&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;miked@example.com&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Hopefully you can see the value that FormsJs brings to web forms. For more information and complete sample config files, check out the README on the &lt;a href=&quot;https://github.com/bwvoss/forms.js&quot;&gt;project’s home page&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 22 Jul 2014 00:00:00 -0500</pubDate>
+        <link>http://mikedanaher.github.io/2014/07/22/formsjs/</link>
+        <guid isPermaLink="true">http://mikedanaher.github.io/2014/07/22/formsjs/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>Introduction to Git</title>
+        <description>&lt;p&gt;As long as developers have been writing software, they have realized that their software rarely stays the same. It is constantly being refactored, added to, and modified in some way. As requirements change and systems evolve, we as developers need a tool to help us track and manage these changes. We also need a tool that will allow more than one developer to work on a project at the same time without getting in each other’s way. Git helps us do both.&lt;/p&gt;
+
+&lt;p&gt;According to Wikipedia (and ultimately Linus Torvalds), Git is a distributed revision control and source code management (SCM) system with an emphasis on speed. Written by Linus Torvalds in the C programming language, Git is his answer to revision control and SCM where others fell short. It grew out of the need for a scalable, distributed, and safe system for storing the source code for Linux. It also needed to be extremely fast and easy to use. Written in just a few months, Git was born from these criteria.&lt;/p&gt;
+
+&lt;h3 id=&quot;revision-control&quot;&gt;Revision Control&lt;/h3&gt;
+
+&lt;p&gt;At the heart of Git is a powerful revision control system. Once you’ve told Git that you want it to track a directory, it will track every change you make to every file that’s added to that directory. It tracks these changes line by line and can show you those differences.&lt;/p&gt;
+
+&lt;p&gt;Once you get to a logical break point, and are happy with all the changes you’ve made, you need to save those changes. You tell Git you want to commit the changes you’ve been working on. This takes a snapshot of your current working directory and saves a pointer to it with a unique identifier. You’ll use these unique identifiers if you ever need to revert back to a previous commit.&lt;/p&gt;
+
+&lt;p&gt;It is interesting to consider that Git saves an entire snapshot of the working directory with each commit. By doing this, Git is able move backwards and forwards through time, giving you a complete version of all the changes. Each commit builds upon the one before it, so Git just has to compile them in order to get the complete directory structure. WIth Git in control of your files, there should be no fear in deleting or changing anything. You can always go back and see what you did or completely reverse any changes made. This piece of mind alone should be enough to want to use Git.&lt;/p&gt;
+
+&lt;h3 id=&quot;branching&quot;&gt;Branching&lt;/h3&gt;
+
+&lt;p&gt;While Git gives us the ability to roll back to a previous version, sometimes we don’t want to delete everything we’ve been working on, just a part of it. For these instances (and many more), Git gives us branching.&lt;/p&gt;
+
+&lt;p&gt;Branching is the method that switches the working directory to a new parallel directory. Once branched, work can continue along both paths, but any and all changes are completely separate from each other. Why might we want to do this?&lt;/p&gt;
+
+&lt;p&gt;One reason might be to try something out. Say we want to implement new functionality, but we don’t want to break anything in our program. We can branch the program and just try our new functionality in that branch. If everything works, we can then merge our branch with the main one and continue on.&lt;/p&gt;
+
+&lt;p&gt;Just as with going back in time with commits, branching gives us the ability to take a snapshot of the working program, try something new, and if we fail (or succeed), it’s trivial to go back to where we came from. In fact, it’s so trivial that Git encourages everyone to only work in parallel branches and never touch the main (master) branch until a new feature has been completed and tested.&lt;/p&gt;
+
+&lt;h3 id=&quot;distributed&quot;&gt;Distributed&lt;/h3&gt;
+
+&lt;p&gt;Because each commit builds upon the previous ones, and each branch just forks the current directory, Git needs to have everything stored locally. It needs to be installed and used locally. While this may seem like a step back (given the current buzz around ‘cloud’ computing) it’s actually another positive attribute.&lt;/p&gt;
+
+&lt;p&gt;By keeping Git local, several developers can work on the same project at the same time, without stepping all over each other. They can edit any file they wish without having to worry about ‘locked for editing by [user x]’. Because of Git’s strong branching and merging abilities, each developer can simply merge their changes with each other (or one central repository) when they are done.&lt;/p&gt;
+
+&lt;p&gt;The distributed design of Git also helps protect data loss. If a developer’s machine crashes, only that person’s work is lost. The rest of the project files remain untouched on other machines. By working off more than one machine for every project, you can almost guarantee a catastrophic event will not destroy your work.&lt;/p&gt;
+
+&lt;p&gt;When Linus Torvalds was building Git, one of his main concerns was speed. He needed to be able to commit, branch, merge, and push his files without long delays. By keeping everything local, and building it in C, he achieved that goal. Git is incredibly fast. Having not worked with other SCM systems, I have nothing to compare it to, but using Git is definitely not a bottleneck in my own development.&lt;/p&gt;
+
+&lt;h3 id=&quot;getting-started&quot;&gt;Getting Started&lt;/h3&gt;
+
+&lt;p&gt;Getting started with Git is very easy. As a first step, visit git-scm.com to download and install Git for your machine (there are many other ways to install as well). Once installed locally, you have to tell it what to track. Open a terminal and navigate to the directory you would like Git to track. Use the init function:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ git init&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;You’ve just told Git to watch this directory. From now on, any changes you make to files in this directory, Git will know about. As a best practice, you should make your first commit right away to give yourself a starting point.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ git add -A&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This step adds all the files you’ve been working on to the staging area. The staging area is a buffer that you can use to select which files you want to include in your next commit. The -A command adds all files, but you can specify files individually if there are some you’re not ready to commit. For the first commit, any and all should be added.&lt;/p&gt;
+
+&lt;p&gt;Once all your files are in the staging area, you’re ready to commit.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ git commit&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Optionally, you can add -m followed by your commit message in quotes. This message is stored with your commit so you (and others) know what was included in that commit. If you don’t add the -m here, Git will open your default text editor where you can type your message.&lt;/p&gt;
+
+&lt;p&gt;At this point you’ve successfully made the first commit. As you continue to make changes to your project, Git will track those changes as you go. At some point, you’ll want to see what files have changed, but haven’t been committed.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ git status&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;All modified files will appear. For more detail about exactly what was changed:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ git diff&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now you can view all the changes line by line. To see a history of all the commits:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ git log&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;These basic commands will take you most of the way through Git. Next we’ll look at branching and how to work with others.&lt;/p&gt;
+
+&lt;h3 id=&quot;collaborative-git&quot;&gt;Collaborative Git&lt;/h3&gt;
+
+&lt;p&gt;While everything in Git is done locally, there is certainly some benefits to storing your files off site. If you’re working with a dispersed team you’ll want a central location where everyone can access the master branch. If you’re working alone, you’ll want a backup of your local machine. GitHub is a popular off site repository for Git projects, but there are many others.&lt;/p&gt;
+
+&lt;p&gt;If you are working with a remote repository, you’ll first have to download all the source files so you have them locally. This is done with clone:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ git clone &amp;lt;address of server and files&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;When all the files have downloaded, Git will automatically make your local copy a branch of the remote. It will call the remote ‘origin’ and yours will be ‘master’. Every change and commit you make will move along your local ‘master’ branch. Now, if you want to update the remote branch, you’ll have to push your commits to the remote.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ git push&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This pushes your local commit to the remote repository where everyone else on the team can see what you’ve done.&lt;/p&gt;
+
+&lt;p&gt;At this point you might be thinking, “what happens if someone else pushes their commit before I do?” This is where the power of Git really shines.&lt;/p&gt;
+
+&lt;p&gt;First, Git will try to merge in your commit to the rest of the branch. If no one else has changed the same files in the same places as you, everything continues as planned. If Git cannot merge your commit, it will say there is a merge conflict and you’ll have to manually fix the merge.&lt;/p&gt;
+
+&lt;p&gt;However, manually fixing the conflict is usually just a matter of looking at both changes and picking the one that should be used. Save the file and commit the merge. if you work as part of a team, a little communication can go a long way to avoid any major merge conflicts. Another best practice when working remotely is to always pull before you push.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ git fetch remote&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This will fetch any changes from the remote branch and bring them to your local machine. Then you’ll have to merge them with the files you’ve been working on. A shortcut for that process is:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ git pull&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;A pull gets all the remote changes and try to merge them with your changes all at once. If everything looks good, you can then push everything back to the remote.&lt;/p&gt;
+
+&lt;h3 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h3&gt;
+
+&lt;p&gt;From the little experience I’ve had with Git, I can already see how powerful it is. It’s been extremely easy to learn the basics, but I’m certain it will take a while to master. I’m currently trying to build the habit of committing often and only making changes to similar code within each commit. I haven’t done much with branching and would like to experiment with that next. I have much to learn, but I’m thankful that there are so many resources available and such a strong community of developers.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 28 Mar 2014 00:00:00 -0500</pubDate>
+        <link>http://mikedanaher.github.io/2014/03/28/introduction-to-git/</link>
+        <guid isPermaLink="true">http://mikedanaher.github.io/2014/03/28/introduction-to-git/</guid>
+        
+        
+      </item>
+    
+      <item>
+        <title>SOLID Writing Principles</title>
+        <description>&lt;p&gt;Often times, when I learn something new I immediately see it everywhere. If you’ve ever considered purchasing a new car, you’ll know the feeling. Suddenly, everyone seems to be driving the car you want. When I started my journey towards software craftsmanship, the first topic I covered was the SOLID principles. These principles should guide every piece of code one writes and help one make decisions about design. And I’m seeing them in other things I do. One such instance is in my writing.&lt;/p&gt;
+
+&lt;p&gt;While the SOLID principles provide excellent guidelines for writing software, I wonder if they might also apply to writing prose. Could software developers, who understand the SOLID principles, learn to write better using them? Here’s how I might use them to guide an aspiring writer.&lt;/p&gt;
+
+&lt;h3 id=&quot;single-responsibility-principle&quot;&gt;Single Responsibility Principle&lt;/h3&gt;
+
+&lt;p&gt;In software development, the Single Responsibility Principle states that a class should have only one responsibility. When you’re writing new classes, the moment you notice yourself writing unrelated methods, you should step back and create a new class. The same goes for writing prose. A written work should have a single purpose. And within that, each paragraph should have a single purpose. The moment you notice yourself going off on a tangent, you should step back and refocus. With modern word processors, it’s extremely easy to delete whole paragraphs at a time.&lt;/p&gt;
+
+&lt;p&gt;By writing with a single purpose, it’s easier to be clear and concise. As you brainstorm your topic, think about the various points you’ll need to prove. If those points don’t directly pertain to your topic, omit them. If you don’t think you have enough points, hold the topic until you do. It’s better to write less, than to add in unrelated filler. &lt;/p&gt;
+
+&lt;p&gt;Just as in software, writing clear and simple prose takes practice. It’s definitely harder to write clean, easy to follow sentences than to write complicated run-on sentences. But if you keep your focus on the purpose, it becomes much easier to cut out all the fluff. A good way to keep that focus is to look at the first sentence of each paragraph. Typically the first sentence sets up the idea and the following ones reinforce it. As you get more comfortable, you’ll learn to catch yourself changing topics before you finish the paragraph.&lt;/p&gt;
+
+&lt;h3 id=&quot;openclosed-principle&quot;&gt;Open/Closed Principle&lt;/h3&gt;
+
+&lt;p&gt;The open/closed principle states that software entities should be open for extension, but closed to modification. Put simply, you (and others) should be able to add to your entities without changing their behavior throughout the rest of the code.  Within your writing, each paragraph should add to the topic without changing what you’ve already written. You never want to get to the bottom of your article and find that you’ve talked yourself into a corner you can’t get out of. If you start the paper believing one thing, but end the paper believing another, it’s not going to be too convincing to your readers. Plan out your points ahead of time and stick to your story.
+Within the global context, your article is your work. Others can’t modify what you’ve written, but should be able to add to it. If you’ve written a successful paper, the reader should be thinking critically about the topic you’ve chosen. You want to evoke emotion in your readers (either pro or con) where they are driven to add to your work. You want your writing to advance the conversation, bringing up new questions and sparking new interest. Even if you’re just writing for yourself, your work should motivate you to act. An extendable story is much more interesting than one that finishes with a dead end.&lt;/p&gt;
+
+&lt;h3 id=&quot;liskov-substitution-principle&quot;&gt;Liskov Substitution Principle&lt;/h3&gt;
+
+&lt;p&gt;Using this principle, a software developer should create classes with subclasses that are perfectly interchangeable. A subclass should override the parent’s methods such that any client that can use the parent class should be able to use the subclass as well. While our writing typically doesn’t involve classes and subclasses, one effective interchangeable tool is the use of a metaphor. By incorporating a metaphor into your writing, you can more easily explain complex topics using something the reader should already understand.&lt;/p&gt;
+
+&lt;p&gt;Just like subclasses extend their parent, metaphors extend your topic. They make their properties available to your ideas. You can use those properties to make a point, explain a concept, or connect with the reader. Metaphors make powerful tools, but can also be dangerous.&lt;/p&gt;
+
+&lt;p&gt;Just as with parents and their subclasses, metaphors should only be used when they are interchangeable with the topic. A metaphor that only partly matches the topic could do more harm than good. You don’t want to put unnecessary ideas into the reader’s head if they do not advance your purpose. Use metaphors to enhance your writing, but don’t rely on them to solve every problem or explain every situation.&lt;/p&gt;
+
+&lt;h3 id=&quot;interface-segregation-principle&quot;&gt;Interface Segregation Principle&lt;/h3&gt;
+
+&lt;p&gt;You should write software that is easy to interact with. Your API should make sense to the client that is using it. Many client-specific interfaces are preferred to one general-purpose interface. In this same regard, your writing (the interface) needs to consider the reader (client) consuming it.&lt;/p&gt;
+
+&lt;p&gt;The reader is your audience. By knowing your audience, you can create an article that gives them all the information they need. Nothing more. Nothing less. Your arguments should appeal to them. It’s ok to assume a specific level of knowledge. The reader will determine if they are capable of consuming your work. If the audience or medium (i.e.presentation) should ever change, it shouldn’t be that difficult to modify your arguments.&lt;/p&gt;
+
+&lt;h3 id=&quot;dependency-inversion-principle&quot;&gt;Dependency Inversion Principle&lt;/h3&gt;
+
+&lt;p&gt;Abstractions should not depend on details. Details should depend on abstractions. In our software, we should abstract away the dependencies as much as possible to keep our code flexible and maintainable. We should invert our dependencies such that if a method requires other code, that other code should be passed into the method. In a similar manner, if our writing depends on someone else’s writing, we should pass it in and cite it properly. &lt;/p&gt;
+
+&lt;p&gt;An extremely effective way to boost your own work is to reuse the work of others. This goes back to the idea of being open to extension and moving the conversation forward. By using an expert’s work, you can more easily prove your own points and strengthen your own arguments. There’s nothing wrong with injecting someone else’s ideas as long as credit is properly given. &lt;/p&gt;
+
+&lt;p&gt;When you start writing by considering the work of others, you open yourself up to a greater learning experience. Everything you read becomes possible information to use in your next work. You become more aware of your own beliefs and opinions. You start to write about topics never available to you because you never had the knowledge to explore them. By inverting the traditional dependency you have on knowledge, you can improve your writing far beyond what was possible before.&lt;/p&gt;
+
+&lt;p&gt;By applying the SOLID design principles to our writing, we can improve our prose and expand our influence in the community. The single responsibility principle tells us to write with focus. The open/closed principle helps us improve our reach and focus on the external effects of our work. The Liskov substitution principle pushes us to experiment with metaphors while the interface segregation principle tells us to never forget our audience. The dependency inversion principle helps us improve our work through the work of others. The skills we learn and practice as software developers are useful in many areas of our lives. Where else might those skills apply?&lt;/p&gt;
+</description>
+        <pubDate>Fri, 07 Mar 2014 00:00:00 -0600</pubDate>
+        <link>http://mikedanaher.github.io/2014/03/07/solid-writing-principles/</link>
+        <guid isPermaLink="true">http://mikedanaher.github.io/2014/03/07/solid-writing-principles/</guid>
+        
+        
+      </item>
+    
+  </channel>
+</rss>

@@ -2,7 +2,6 @@
 layout: post
 title:  "SOLID Writing Principles"
 date:   2014-03-07
-categories: solid
 ---
 
 Often times, when I learn something new I immediately see it everywhere. If you've ever considered purchasing a new car, you'll know the feeling. Suddenly, everyone seems to be driving the car you want. When I started my journey towards software craftsmanship, the first topic I covered was the SOLID principles. These principles should guide every piece of code one writes and help one make decisions about design. And I'm seeing them in other things I do. One such instance is in my writing.
