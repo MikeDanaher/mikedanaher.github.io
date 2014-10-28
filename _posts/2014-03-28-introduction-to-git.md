@@ -2,6 +2,7 @@
 layout: post
 title:  "Introduction to Git"
 date:   2014-03-28
+visible: true
 ---
 
 As long as developers have been writing software, they have realized that their software rarely stays the same. It is constantly being refactored, added to, and modified in some way. As requirements change and systems evolve, we as developers need a tool to help us track and manage these changes. We also need a tool that will allow more than one developer to work on a project at the same time without getting in each other’s way. Git helps us do both.

@@ -2,6 +2,7 @@
 layout: post
 title:  "SOLID Writing Principles"
 date:   2014-03-07
+visible: true
 ---
 
 Often times, when I learn something new I immediately see it everywhere. If you've ever considered purchasing a new car, you'll know the feeling. Suddenly, everyone seems to be driving the car you want. When I started my journey towards software craftsmanship, the first topic I covered was the SOLID principles. These principles should guide every piece of code one writes and help one make decisions about design. And I'm seeing them in other things I do. One such instance is in my writing.
@@ -12,7 +13,7 @@ While the SOLID principles provide excellent guidelines for writing software, I 
 
 In software development, the Single Responsibility Principle states that a class should have only one responsibility. When you're writing new classes, the moment you notice yourself writing unrelated methods, you should step back and create a new class. The same goes for writing prose. A written work should have a single purpose. And within that, each paragraph should have a single purpose. The moment you notice yourself going off on a tangent, you should step back and refocus. With modern word processors, it's extremely easy to delete whole paragraphs at a time.
 
-By writing with a single purpose, it's easier to be clear and concise. As you brainstorm your topic, think about the various points you'll need to prove. If those points don't directly pertain to your topic, omit them. If you don't think you have enough points, hold the topic until you do. It's better to write less, than to add in unrelated filler. 
+By writing with a single purpose, it's easier to be clear and concise. As you brainstorm your topic, think about the various points you'll need to prove. If those points don't directly pertain to your topic, omit them. If you don't think you have enough points, hold the topic until you do. It's better to write less, than to add in unrelated filler.
 
 Just as in software, writing clear and simple prose takes practice. It's definitely harder to write clean, easy to follow sentences than to write complicated run-on sentences. But if you keep your focus on the purpose, it becomes much easier to cut out all the fluff. A good way to keep that focus is to look at the first sentence of each paragraph. Typically the first sentence sets up the idea and the following ones reinforce it. As you get more comfortable, you'll learn to catch yourself changing topics before you finish the paragraph.
 
@@ -37,9 +38,9 @@ The reader is your audience. By knowing your audience, you can create an article
 
 ### Dependency Inversion Principle
 
-Abstractions should not depend on details. Details should depend on abstractions. In our software, we should abstract away the dependencies as much as possible to keep our code flexible and maintainable. We should invert our dependencies such that if a method requires other code, that other code should be passed into the method. In a similar manner, if our writing depends on someone else's writing, we should pass it in and cite it properly. 
+Abstractions should not depend on details. Details should depend on abstractions. In our software, we should abstract away the dependencies as much as possible to keep our code flexible and maintainable. We should invert our dependencies such that if a method requires other code, that other code should be passed into the method. In a similar manner, if our writing depends on someone else's writing, we should pass it in and cite it properly.
 
-An extremely effective way to boost your own work is to reuse the work of others. This goes back to the idea of being open to extension and moving the conversation forward. By using an expert's work, you can more easily prove your own points and strengthen your own arguments. There's nothing wrong with injecting someone else's ideas as long as credit is properly given. 
+An extremely effective way to boost your own work is to reuse the work of others. This goes back to the idea of being open to extension and moving the conversation forward. By using an expert's work, you can more easily prove your own points and strengthen your own arguments. There's nothing wrong with injecting someone else's ideas as long as credit is properly given.
 
 When you start writing by considering the work of others, you open yourself up to a greater learning experience. Everything you read becomes possible information to use in your next work. You become more aware of your own beliefs and opinions. You start to write about topics never available to you because you never had the knowledge to explore them. By inverting the traditional dependency you have on knowledge, you can improve your writing far beyond what was possible before.
 

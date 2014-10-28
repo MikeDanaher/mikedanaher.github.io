@@ -2,6 +2,7 @@
 layout: post
 title:  "Pair Programming"
 date:   2014-08-11
+visible: true
 ---
 
 When I started as a resident apprentice at 8th Light, I quickly learned one of the main tenets of software craftsmanship: pair programming. Pairing is the practice of writing software with one computer, two keyboards, and two minds working together. It requires communication, collaboration, patience, and presence. You cannot help but be productive when pair programming.
