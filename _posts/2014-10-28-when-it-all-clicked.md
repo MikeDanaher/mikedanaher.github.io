@@ -7,18 +7,19 @@ visible: false
 
 <img src="/images/duck-rabbit-illusion.jpg" alt="Duck or Rabbit Illusion" style="width: 100%; margin: 0 auto" />
 
-Take a look at the picture above. What do you see? I see a duck. And a rabbit.
-Do you see them both?
+Take a look at the picture above. What do you see? I see a duck. I also see a
+rabbit. Do you see them both?
 
-Once you've seen both the duck and the rabbit, you can't go back. Your mind will
-continue to see them both. No matter how hard you try, you will always see both
-a rabbit and a duck.
+Once you've seen both the duck and the rabbit, you can't go back. Your mind
+will continue to see them both. No matter how hard you try to focus in on one
+image, you will always see both a rabbit and a duck.
 
-Learning is like this. Once you've 'truly' learned something, you can't go back.
-You can't unlearn. With learning, there is usually a turning point, a moment in
-time you can say that everything clicked. A moment when a duck turns into a
-rabbit. A moment where everything that was previously unclear, becomes clear.
-Throughout my software apprenticeship, there were several such moments.
+Learning is like this. Once you've 'truly' learned something, you can't go
+back.  You can't forget it. With learning, there is usually a turning point, a
+moment in time you can say that everything clicked. A moment when a duck turns
+into a rabbit. A moment where everything that was previously unclear, becomes
+clear and in focus. Throughout my software apprenticeship, there were several
+such moments.
 
 ### Duck Typing & Interfaces
 
@@ -112,7 +113,7 @@ output streams.
 Learning about interfaces and duck typing has changed the way I approach writing
 code. It's easier for me to see how objects interact and fit together and I am
 better able to test things that may at first seem difficult to test. While duck
-typing is quite useful on it's own, once I incorporated it into my code, I
+typing is quite useful on its own, once I incorporated it into my code, I
 solidified another concept that had thus far eluded me.
 
 ### Abstraction
@@ -200,9 +201,9 @@ end
 By making that mistake, the idea of a leaky abstraction became clear. I
 understood what my mentor meant and I now know what to look for so as not to
 make that mistake again. Your abstracted object should be the only one that
-knows about it's inner structure.
+knows about its inner structure.
 
-What's nice about both interfaces and abstraction is that they compliment each
+What's nice about both interfaces and abstraction is that they complement each
 other quite well. If you want to test whether you have a clean abstraction, see
 if your object can be replaced by a mock object and still function. If
 you have clean boundaries and well defined interfaces, it should be trivial to
