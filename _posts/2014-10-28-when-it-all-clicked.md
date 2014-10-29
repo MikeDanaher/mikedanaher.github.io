@@ -10,24 +10,24 @@ visible: false
 Take a look at the picture above. What do you see? I see a duck. And a rabbit.
 Do you see them both?
 
-Once you've seen both the rabbit and the duck, you can't go back. Your mind will
+Once you've seen both the duck and the rabbit, you can't go back. Your mind will
 continue to see them both. No matter how hard you try, you will always see both
 a rabbit and a duck.
 
 Learning is like this. Once you've 'truly' learned something, you can't go back.
 You can't unlearn. With learning, there is usually a turning point, a moment in
-time you can say that everything clicked. A moment when a rabbit turns into a
-duck. A moment where everything that was previously unclear, becomes clear.
+time you can say that everything clicked. A moment when a duck turns into a
+rabbit. A moment where everything that was previously unclear, becomes clear.
 Throughout my software apprenticeship, there were several such moments.
 
-### Interfaces & Duck Typing
+### Duck Typing & Interfaces
 
 I don't have a degree in computer science or object oriented programming. I took
-a few classes in Java but never practiced enough to grasp the key concepts. I
-remember the ideas of interfaces, polymorphism and duck typing, but they never
-really stuck.
+a few classes in Java but never practiced enough to grasp the key concepts. From
+those classes, I remember the ideas of interfaces, polymorphism and duck typing,
+but they never really stuck.
 
-On one of my first projects I was told to look at the Factory pattern. Without
+On one of my first projects, I was told to look at the Factory pattern. Without
 understanding what was happening, I was able to implement it. Here's an example
 from [FormsJs](https://github.com/bwvoss/forms.js):
 
@@ -53,14 +53,13 @@ class FormsJs.Validator.Email
     @EMAILREGEXP.test(value) or value is ''
 {% endhighlight %}
 
-The validator is a duck type. As long as it's interface responds to the
-`.isValid()` method it can be called a validator. We can create any number of
-validators (like minLength, required, matchesInput) and pass them into the
-`_checkAllValidations` function and they will work. This gives us the
-flexibility to have multiple validators (each with different functionality), but
-access them all through just one function. It creates a flexible system that can
-grow as needed in the future and doesn't contain a bunch of `if..else`
-statements.
+The validator is a duck type. As long as it responds to the `.isValid()` method
+it can be called a validator. We can create any number of validators (like
+minLength, required, matchesInput) and pass them into the `_checkAllValidations`
+function and they will work. This gives us the flexibility to have multiple
+validators (each with different functionality), but access them all through just
+one function. It creates a flexible system that can grow as needed in the future
+and doesn't contain a bunch of `if..else` statements.
 
 At this point, I understood the factory pattern, but it was difficult to apply
 it in other settings. I certainly didn't make the connection to duck typing.
@@ -81,7 +80,7 @@ Each `Handler` object responded to `handle()` and returned a `Response`. It was
 at this point that I made the connection to the factory pattern and duck types.
 
 Once I made that connection, I also immediately understood what mocks were for
-in testing. A mock is nothing more than a duck typed interface. It is meant to
+in testing. A mock is nothing more than a duck type. It is meant to
 replace the real object so that the test doesn't depend on anything concrete.
 Mocks are especially handy for input and output:
 
@@ -125,7 +124,7 @@ game for the third time that I fully grasped the ideas behind abstraction.
 
 Typically, one implements the tic-tac-toe board as an array. That array is
 usually given an initial count, like 9, to represent a 3x3 grid. Depending on
-the language you chose, the array is usually filled with something. In Ruby,
+the language you choose, the array is usually filled with something. In Ruby,
 it's `nil`.
 
 {% highlight ruby linenos %}
@@ -181,7 +180,7 @@ end
 At this point it became clear to me how an abstraction can leak. Because I knew
 that the board was an array, and empty cells were nil, I could validate the
 input of the user by directly accessing the array. But if anything changed about
-my implementation of the baord, this method would break. What if I wanted to use
+my implementation of the board, this method would break. What if I wanted to use
 empty strings instead of nil as placeholders in the array?
 
 The board should be the only object that knows what cells are empty. To allow
@@ -205,7 +204,7 @@ knows about it's inner structure.
 
 What's nice about both interfaces and abstraction is that they compliment each
 other quite well. If you want to test whether you have a clean abstraction, see
-if your object can be replaced by a similar object and still function. If
+if your object can be replaced by a mock object and still function. If
 you have clean boundaries and well defined interfaces, it should be trivial to
 swap objects.
 
